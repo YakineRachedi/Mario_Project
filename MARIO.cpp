@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Mario::Mario(double _x, double _y, double _Vx, double _Vy): mario_x(_x), mario_y(_y), Vx(_Vx), Vy(_Vy) {
+Mario::Mario(double _x, double _y, double _Vx, double _Vy): mario_x(_x), mario_y(_y), Vx(_Vx), Vy(_Vy), isJumping(false) {
             // on initialise les param a 0 car Mario est au début de la map
             // Les vitesses dans les assetes pour s'assurer que l'utilisateur ne fait pas n'importe quoi, 
             // soit il avance, soit il recule, soit il reste dans sa place (a vitesse constante)
@@ -25,10 +25,57 @@ void Mario::avancer(double vit_x, double vit_y, double delta_t){
             mario_y += Vy * delta_t;
         }
 
-void Mario::render(SDL_Renderer* renderer) const {
-    // static_cast<int> permet de transformer les doubles en int
-    SDL_Rect rect = {static_cast<int>(mario_x), static_cast<int>(mario_y),
-                     static_cast<int>(L), static_cast<int>(H)};
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Rouge
-    SDL_RenderFillRect(renderer, &rect);
+/*
+void Mario::saute(double saute_x, double saute_y, double delta_t){
+    assert((saute_x == -1 || saute_x == 0 || saute_x == 1) &&
+        (saute_y == 0 || saute_y == 1));
+    // vitesses initiales
+    Vx = saute_x;
+    Vy = saute_y;
+
+    const double gravity = -9.80665; // Constante gravitationnelle (orientée vers le bas pourcela y a un -)
+    
+    // Met à jour la position pendant le saut
+    mario_y += Vy * delta_t + 0.5 * gravity * delta_t * delta_t; // position y avec gravité 
+                                                // (ici l'accélération = gravité pas sur raisons physiques xD !)
+    mario_x += Vx * delta_t;  // position x sans gravité (selon l'axe ox)
+
+    // Mise à jour de la vitesse en y (Vy décroît pour simuler la chute)
+    Vy += gravity * delta_t; // de meme accélariton = gravité
+
+    // Gestion du sol (si Mario descend en dessous de 0, on le ramène au sol)
+    if (mario_y < 0) {
+        mario_y = 0;
+        Vy = 0; // Arrête le mouvement vertical si Mario touche le sol
+    }
+}
+*/
+
+void Mario::saute(double delta_t) {
+    if (!isJumping) {
+        mario_y -= 10;
+        Vy = -15; // Vitesse initiale du saut
+        isJumping = true;
+    }
+}
+
+void Mario::update(double delta_t) {
+    const double gravity = 9.8;
+
+    // Appliquer la gravité si Mario est en saut
+    if (isJumping) {
+        mario_y += Vy * delta_t;
+        Vy += gravity * delta_t;
+
+        // Vérifier si Mario touche le sol
+        if (mario_y >= 440) {
+            mario_y = 440;
+            Vy = 0;
+            isJumping = false;
+        }
+    }
+
+    // Limiter les positions (par exemple, pour rester dans l'écran)
+    if (mario_x < 0) mario_x = 0;
+    if (mario_x > 800 - L) mario_x = 800 - L; // Limite horizontale
 }

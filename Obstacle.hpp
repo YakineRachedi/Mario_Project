@@ -22,3 +22,5 @@ class Obstacle{
         //double distance(double position_mario_x, double position_mario_y);
 
 };
+
+#endif

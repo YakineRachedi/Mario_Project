@@ -7,6 +7,9 @@
 
 class Screen;
 
+//#define SCREEN_WIDTH 1080
+//#define SCREEN_HEIGHT 960
+//#define GROUND SCREEN_HEIGHT / 2
 
 class Mario{
     private :
@@ -14,6 +17,8 @@ class Mario{
         double Vx, Vy;                        // vitesse selon x et y
         static constexpr double L = 40.0;    // Largeur
         static constexpr double H = 50.0;    // Hauteur
+        bool isJumping;          // Indique si Mario est en train de sauter
+
         friend class Screen;                // Permet à Screen d'accéder aux membres privés de Mario
 
     public :
@@ -24,11 +29,13 @@ class Mario{
         double get_vitesse_y() const {return this->Vy;}
         double get_hauteur() const {return this->H;}
         double get_largeur() const {return this->L;}
-        void render(SDL_Renderer* renderer) const;
         void avancer(double vit_x, double vit_y, double delta_t);
 
+        //void saute(double saute_x, double saute_y, double delta_t);
+        void saute(double delta_t);
+        void update(double delta_t); // Mise à jour générale
 
-        void saute(double saute_x, double saute_y, double delta_t);
+
 };
 
 #endif

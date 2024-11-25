@@ -32,7 +32,9 @@ bool Screen::init() {
 }
 
 void Screen::clear() {
-    SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+    //SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255); ici background noir
+    //drawBackground();
+    //SDL_SetRenderDrawColor(m_renderer, 135, 206, 235, 255);  // Bleu ciel pour le fond initial
     SDL_RenderClear(m_renderer);
 }
 
@@ -42,33 +44,64 @@ void Screen::close() {
     SDL_Quit();
 }
 
-bool Screen::processEvents(Mario &mario) {
+bool Screen::processEvents(Mario & mario) {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             return false;
         }
-        if (event.type == SDL_KEYDOWN) { // Événement clavier
+
+        if (event.type == SDL_KEYDOWN) {
+            
+            // Contrôler Mario avec les touches
             switch (event.key.keysym.sym) {
-                case SDLK_UP: // Flèche haut
-                    mario.avancer(0, -1, 10); // Avance vers le haut
+                case SDLK_LEFT:
+                    mario.avancer(-1, 0, 1); // Avance vers la gauche
                     break;
-                case SDLK_DOWN: // Flèche bas
-                    mario.avancer(0, 1, 10); // Avance vers le bas
+                case SDLK_RIGHT:
+                    mario.avancer(1, 0, 1); // Avance vers la droite
                     break;
-                case SDLK_LEFT: // Flèche gauche
-                    mario.avancer(-1, 0, 10); // Avance vers la gauche
-                    break;
-                case SDLK_RIGHT: // Flèche droite
-                    mario.avancer(1, 0, 10); // Avance vers la droite
-                    break;
+            }
+        }
+        if (event.type == SDL_KEYUP) {
+            if (event.key.keysym.sym == SDLK_SPACE) {
+                mario.saute(4); // Initie le saut
             }
         }
     }
     return true;
 }
 
-void Screen::drawMario(const Mario &mario) {
-    mario.render(m_renderer);
+void Screen::drawMario(const Mario & mario) {
+    SDL_Rect rect = {static_cast<int>(mario.mario_x), static_cast<int>(mario.mario_y), // mario à sa position actuelle
+                     static_cast<int>(mario.H),static_cast<int>(mario.L)};
+
+    SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255); // Mario en rouge
+    SDL_RenderFillRect(m_renderer, &rect);
+    
+}
+
+void Screen::update() {
+    SDL_RenderPresent(m_renderer); // Actualiser l'écran et mettre à jours
+}
+
+void Screen::drawBackground() {
+    // Dessiner le ciel
+    SDL_SetRenderDrawColor(m_renderer, 135, 206, 235, 255); // Bleu ciel
+    SDL_Rect skyRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT / 2}; // La moitié supérieure de l'écran
+    SDL_RenderFillRect(m_renderer, &skyRect);
+
+    // Dessiner le sol
+    SDL_SetRenderDrawColor(m_renderer, 34, 139, 34, 255); // Vert pour le sol
+    SDL_Rect groundRect = {0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT / 2}; // La moitié inférieure
+    SDL_RenderFillRect(m_renderer, &groundRect);
+}
+
+
+void Screen::drawObstacle(const Obstacle & terrainObstacle){
+    SDL_Rect rect = {static_cast<int>(terrainObstacle.x), static_cast<int>(terrainObstacle.y),
+             static_cast<int>(terrainObstacle.h), static_cast<int>(terrainObstacle.l)};
+    SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255); // Noir
+    SDL_RenderFillRect(m_renderer, &rect);
 }

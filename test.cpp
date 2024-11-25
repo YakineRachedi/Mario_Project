@@ -1,35 +1,43 @@
 #include <iostream>
-#include "MARIO.hpp"
 #include "Screen.hpp"
+#include "MARIO.hpp"
+#include <SDL2/SDL.h>  // SDL pour la gestion des événements et l'affichage
+#include <vector>
+
+
 using namespace std;
 
 int main() {
-    // Instanciation de l'écran
     Screen screen;
-
-    // Initialisation de l'écran
+    const int GROUND = 440;
+    vector<Obstacle> obstacles = {
+    Obstacle(200, GROUND, 50, 50),
+    Obstacle(400, GROUND, 30, 30),  
+    Obstacle(600, GROUND, 40, 20)
+};
     if (!screen.init()) {
-        cout << "Initialization error" << endl;
-        return 1; // Sortie en cas d'échec
+        cout << "Erreur lors de l'initialisation de la fenêtre !" << endl;
+        return -1;
     }
 
-    // Création d'un Mario avec des positions initiales
-    Mario johnlouis(100, 200, 1, 0);
+//    Mario mario(100.0, GROUND, 0.0, 0.0); // defauts ici meme si je mets Vx = 0 et Vy = 0 il bouge
+    Mario mario(0,GROUND);
+//    Mario mario;
+    bool running = true;
+    while (running) {
+        screen.clear();  // Efface l'écran au début de chaque frame
+        screen.drawBackground();
+        for (const auto& obstacle : obstacles) {
+            screen.drawObstacle(obstacle);  // Dessiner chaque obstacle
+        } 
 
-    // Boucle de jeu
-    while (true) {
-        if (!screen.processEvents(johnlouis)) {
-            break;
-        }
+        mario.update(4); // Met à jour Mario avec un delta_t (par exemple 16 ms)
+        screen.drawMario(mario);  // Dessiner Mario
+        cout << "boucle principale \n";
+        running = screen.processEvents(mario);  // Traiter les événements utilisateur
 
-        screen.clear(); // Effacer l'écran
-        screen.drawMario(johnlouis); // Dessiner Mario
-        SDL_RenderPresent(screen.getRenderer()); // Mettre à jour l'affichage
+        screen.update();  // Mettre à jour l'affichage
     }
-
-    // Fermer l'écran correctement
     screen.close();
-
     return 0;
 }
-
