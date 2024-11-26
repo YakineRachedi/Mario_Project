@@ -11,6 +11,7 @@
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 960
 
+
 class Screen{
 
     private :

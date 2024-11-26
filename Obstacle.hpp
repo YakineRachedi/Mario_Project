@@ -18,9 +18,6 @@ class Obstacle{
         double get_position_y() const {return this->y;}
         double get_hauteur() const {return this->h;}
         double get_largeur() const {return this->l;} 
-
-        //double distance(double position_mario_x, double position_mario_y);
-
 };
 
 #endif

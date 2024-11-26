@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Screen.hpp"
 #include "MARIO.hpp"
-#include <SDL2/SDL.h>  // SDL pour la gestion des événements et l'affichage
+//#include <SDL2/SDL.h>  // SDL pour la gestion des événements et l'affichage
 #include <vector>
 
 
@@ -10,6 +10,7 @@ using namespace std;
 int main() {
     Screen screen;
     const int GROUND = 440;
+
     vector<Obstacle> obstacles = {
     Obstacle(200, GROUND, 50, 50),
     Obstacle(400, GROUND, 30, 30),  
@@ -31,9 +32,9 @@ int main() {
             screen.drawObstacle(obstacle);  // Dessiner chaque obstacle
         } 
 
-        mario.update(4); // Met à jour Mario avec un delta_t (par exemple 16 ms)
+        mario.update(DT); // Met à jour Mario avec un delta_t (par exemple 16 ms)
         screen.drawMario(mario);  // Dessiner Mario
-        cout << "boucle principale \n";
+        //cout << "boucle principale \n";
         running = screen.processEvents(mario);  // Traiter les événements utilisateur
 
         screen.update();  // Mettre à jour l'affichage

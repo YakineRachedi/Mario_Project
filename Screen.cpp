@@ -7,6 +7,7 @@ Screen::Screen() {
     m_renderer = NULL;
 }
 
+
 bool Screen::init() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         cout << "Error SDL initialization ..." << endl;
@@ -57,16 +58,16 @@ bool Screen::processEvents(Mario & mario) {
             // Contrôler Mario avec les touches
             switch (event.key.keysym.sym) {
                 case SDLK_LEFT:
-                    mario.avancer(-1, 0, 1); // Avance vers la gauche
+                    mario.avancer(-1, 0, DT); // Avance vers la gauche
                     break;
                 case SDLK_RIGHT:
-                    mario.avancer(1, 0, 1); // Avance vers la droite
+                    mario.avancer(1, 0, DT); // Avance vers la droite
                     break;
             }
         }
         if (event.type == SDL_KEYUP) {
             if (event.key.keysym.sym == SDLK_SPACE) {
-                mario.saute(4); // Initie le saut
+                mario.saute(DT); // Initie le saut
             }
         }
     }
