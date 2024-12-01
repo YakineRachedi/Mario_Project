@@ -35,7 +35,7 @@ int main() {
         mario.update(DT); // Met à jour Mario avec un delta_t (par exemple 16 ms)
         screen.drawMario(mario);  // Dessiner Mario
         //cout << "boucle principale \n";
-        running = screen.processEvents(mario);  // Traiter les événements utilisateur
+        running = screen.processEvents(mario, obstacles);  // Traiter les événements utilisateur
 
         screen.update();  // Mettre à jour l'affichage
     }

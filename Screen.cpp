@@ -45,7 +45,7 @@ void Screen::close() {
     SDL_Quit();
 }
 
-bool Screen::processEvents(Mario & mario) {
+bool Screen::processEvents(Mario & mario, const std::vector<Obstacle> & obstacles) {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -58,16 +58,32 @@ bool Screen::processEvents(Mario & mario) {
             // Contrôler Mario avec les touches
             switch (event.key.keysym.sym) {
                 case SDLK_LEFT:
-                    mario.avancer(-1, 0, DT); // Avance vers la gauche
+                    if (!checkCollisionInDirection(mario, obstacles, -1, 0)) {
+                        mario.avancer(-1, 0, DT); // Avance vers la gauche
+                    }                    
                     break;
                 case SDLK_RIGHT:
-                    mario.avancer(1, 0, DT); // Avance vers la droite
+                    if (!checkCollisionInDirection(mario, obstacles, 1, 0)) {
+                        mario.avancer(1, 0, DT); // Avance vers la droite
+                    }
                     break;
             }
         }
         if (event.type == SDL_KEYUP) {
             if (event.key.keysym.sym == SDLK_SPACE) {
                 mario.saute(DT); // Initie le saut
+            }
+        }
+            // Vérification de la collision avec chaque obstacle
+        for (const Obstacle &obstacle : obstacles) {
+            if (IsColliding(mario, obstacle)) {
+                std::cout << "Intersection de Mario avec l'obstacle !!!" << std::endl;
+                // on peut ajouter des actions ici
+                // Mario pourrait être repositionné ou son mouvement pourrait être stoppé.
+                // Bloquer Mario dans la direction du saut si collision avec le sol
+                if (mario.mario_y + mario.H <= obstacle.y + obstacle.h) {
+                    mario.mario_y = obstacle.y - mario.H;  // Empêcher Mario de passer à travers le sol
+                }
             }
         }
     }
@@ -105,4 +121,57 @@ void Screen::drawObstacle(const Obstacle & terrainObstacle){
              static_cast<int>(terrainObstacle.h), static_cast<int>(terrainObstacle.l)};
     SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255); // Noir
     SDL_RenderFillRect(m_renderer, &rect);
+}
+
+SDL_bool Screen::IsColliding(const Mario &mario, const Obstacle &object) {
+    // je récupère la position du rectangle qui représente Mario    
+    SDL_Rect marioRect = {
+        static_cast<int>(mario.mario_x), static_cast<int>(mario.mario_y),
+        static_cast<int>(mario.L), static_cast<int>(mario.H)
+    };
+    // je récupère la position du rectangle qui représente l'obstacle
+    SDL_Rect objectRect = {
+        static_cast<int>(object.x), static_cast<int>(object.y),
+        static_cast<int>(object.l), static_cast<int>(object.h)
+    };
+
+    return SDL_HasIntersection(&marioRect, &objectRect); // je test l'intersection avec la fonction prédéfinie
+}
+
+/*
+bool Screen::checkCollision(const Mario & mario, const std::vector<Obstacle> & obstacles) {
+    for (const Obstacle &obstacle : obstacles) {
+        if (IsColliding(mario, obstacle)) {
+            return true;  // Collision détectée
+        }
+    }
+    return false;  // Pas de collision
+}
+*/
+
+bool Screen::checkCollisionInDirection(const Mario & mario, const std::vector<Obstacle> & obstacles, int dx, int dy) {
+    
+    // crée un "mouvement futur" pour Mario (en tenant compte de la direction)
+    float future_x = mario.mario_x + dx;
+    float future_y = mario.mario_y + dy;
+
+    // crée un rectangle qui représente Mario dans sa position future
+    SDL_Rect marioFutureRect = {
+        static_cast<int>(future_x), static_cast<int>(future_y),
+        static_cast<int>(mario.L), static_cast<int>(mario.H)
+    };
+
+
+    for (const Obstacle &obstacle : obstacles) { // boucle pour vérifier détecter les collisiobs
+        SDL_Rect objectRect = {
+            static_cast<int>(obstacle.x), static_cast<int>(obstacle.y),
+            static_cast<int>(obstacle.l), static_cast<int>(obstacle.h)
+        };
+        
+        if (SDL_HasIntersection(&marioFutureRect, &objectRect)) {
+            return true;  // collision détectée bloque le mouvement -><- -><- -><-
+        }
+    }
+
+    return false; // Aucune collision -> -> ->  Mario peut se déplacer -> -> ->
 }
