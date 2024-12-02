@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
-
+# ces deux lignes pour le mac 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #Nom du projet
 project(Mario_Project)
 

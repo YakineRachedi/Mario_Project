@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Screen.hpp"
 #include "MARIO.hpp"
-//#include <SDL2/SDL.h>  // SDL pour la gestion des événements et l'affichage
 #include <vector>
 
 
@@ -12,18 +11,16 @@ int main() {
     const int GROUND = 440;
 
     vector<Obstacle> obstacles = {
-    Obstacle(200, GROUND, 50, 50),
-    Obstacle(400, GROUND, 30, 30),  
-    Obstacle(600, GROUND, 40, 20)
+    Obstacle(200, 450, 70, 40),
+    Obstacle(400, 450, 50, 40),  
+    Obstacle(600, 450, 50, 30)
 };
     if (!screen.init()) {
         cout << "Erreur lors de l'initialisation de la fenêtre !" << endl;
         return -1;
     }
 
-//    Mario mario(100.0, GROUND, 0.0, 0.0); // defauts ici meme si je mets Vx = 0 et Vy = 0 il bouge
     Mario mario(0,GROUND);
-//    Mario mario;
     bool running = true;
     while (running) {
         screen.clear();  // Efface l'écran au début de chaque frame
@@ -34,7 +31,6 @@ int main() {
 
         mario.update(DT); // Met à jour Mario avec un delta_t (par exemple 16 ms)
         screen.drawMario(mario);  // Dessiner Mario
-        //cout << "boucle principale \n";
         running = screen.processEvents(mario, obstacles);  // Traiter les événements utilisateur
 
         screen.update();  // Mettre à jour l'affichage

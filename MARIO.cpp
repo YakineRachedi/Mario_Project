@@ -33,7 +33,7 @@ void Mario::avancer(double vit_x, double vit_y, double delta_t){
 
 void Mario::saute(double delta_t) {
     if (!isJumping) {
-        mario_y -= 10;
+        mario_y -= 30;
         Vy = -15; // Vitesse initiale du saut
         Vx /= 4; 
 
@@ -45,12 +45,11 @@ void Mario::update(double delta_t) {
     const double gravity = 9.8;
 
     // Appliquer la gravité si Mario est en saut
-    if (isJumping) {
+    if (isJumping || mario_y + H < 440) {
         
         mario_x += Vx * delta_t;
         mario_y += Vy * delta_t;
         Vy += gravity * delta_t;
-
         // Vérifier si Mario touche le sol
         if (mario_y >= 440) {
             mario_y = 440;

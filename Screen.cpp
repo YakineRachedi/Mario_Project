@@ -33,9 +33,6 @@ bool Screen::init() {
 }
 
 void Screen::clear() {
-    //SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255); ici background noir
-    //drawBackground();
-    //SDL_SetRenderDrawColor(m_renderer, 135, 206, 235, 255);  // Bleu ciel pour le fond initial
     SDL_RenderClear(m_renderer);
 }
 
@@ -81,8 +78,11 @@ bool Screen::processEvents(Mario & mario, const std::vector<Obstacle> & obstacle
                 // on peut ajouter des actions ici
                 // Mario pourrait être repositionné ou son mouvement pourrait être stoppé.
                 // Bloquer Mario dans la direction du saut si collision avec le sol
-                if (mario.mario_y + mario.H <= obstacle.y + obstacle.h) {
-                    mario.mario_y = obstacle.y - mario.H;  // Empêcher Mario de passer à travers le sol
+                if (mario.mario_y + mario.H <= obstacle.y + 10) { 
+                    // Mario est juste au-dessus de l'obstacle
+                    mario.mario_y = obstacle.y - mario.H;  // positionner Mario au sommet de l'obstacle
+                    mario.Vy = 0;  // annuler sa vitesse verticale
+                    mario.isJumping = false;  // ob considere que Mario n'est plus en train de sauter
                 }
             }
         }
@@ -137,17 +137,6 @@ SDL_bool Screen::IsColliding(const Mario &mario, const Obstacle &object) {
 
     return SDL_HasIntersection(&marioRect, &objectRect); // je test l'intersection avec la fonction prédéfinie
 }
-
-/*
-bool Screen::checkCollision(const Mario & mario, const std::vector<Obstacle> & obstacles) {
-    for (const Obstacle &obstacle : obstacles) {
-        if (IsColliding(mario, obstacle)) {
-            return true;  // Collision détectée
-        }
-    }
-    return false;  // Pas de collision
-}
-*/
 
 bool Screen::checkCollisionInDirection(const Mario & mario, const std::vector<Obstacle> & obstacles, int dx, int dy) {
     
