@@ -9,11 +9,11 @@ using namespace std;
 int main() {
     Screen screen;
     const int GROUND = 440;
-
+    Ennemi ennemi(650, 450, 50, 30);
     vector<Obstacle> obstacles = {
     Obstacle(200, 450, 70, 40),
     Obstacle(400, 450, 50, 40),  
-    Obstacle(600, 450, 50, 30)
+    //Obstacle(600, 450, 50, 30)
 };
     if (!screen.init()) {
         cout << "Erreur lors de l'initialisation de la fenêtre !" << endl;
@@ -25,6 +25,7 @@ int main() {
     while (running) {
         screen.clear();  // Efface l'écran au début de chaque frame
         screen.drawBackground();
+        screen.drawEnnemi(ennemi);
         for (const auto& obstacle : obstacles) {
             screen.drawObstacle(obstacle);  // Dessiner chaque obstacle
         } 

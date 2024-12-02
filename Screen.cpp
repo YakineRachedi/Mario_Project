@@ -123,6 +123,13 @@ void Screen::drawObstacle(const Obstacle & terrainObstacle){
     SDL_RenderFillRect(m_renderer, &rect);
 }
 
+void Screen::drawEnnemi(const Ennemi & terrainEnnemi){
+    SDL_Rect rect = {static_cast<int>(terrainEnnemi.x), static_cast<int>(terrainEnnemi.y),
+             static_cast<int>(terrainEnnemi.h), static_cast<int>(terrainEnnemi.l)};
+    SDL_SetRenderDrawColor(m_renderer, 0, 255, 0, 255); // Vert
+    SDL_RenderFillRect(m_renderer, &rect);
+}
+
 SDL_bool Screen::IsColliding(const Mario &mario, const Obstacle &object) {
     // je récupère la position du rectangle qui représente Mario    
     SDL_Rect marioRect = {

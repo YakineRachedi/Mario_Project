@@ -7,6 +7,7 @@
 #include <assert.h>
 #include "MARIO.hpp"
 #include "Obstacle.hpp"
+#include "Ennemi.hpp"
 // Dimensions de l'écran
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 960
@@ -31,10 +32,14 @@ class Screen{
         void drawBackground();               // Dessinier le ciel et le sol
         void update();                       // Mettre à jour l'écran (actualiser l'affichage)
         void drawObstacle(const Obstacle & terrainObstacle); // Dessinier les obstacles
+        void drawEnnemi(const Ennemi & terrainEnnemi);
+     
 
         SDL_bool IsColliding(const Mario & mario, const Obstacle & object); // pour tester l'intersection avec mario
         // bool checkCollision(const Mario & mario, const std::vector<Obstacle> & obstacles)
         bool checkCollisionInDirection(const Mario & mario, const std::vector<Obstacle> & obstacles, int dx, int dy);
+
+
 };
 
 #endif

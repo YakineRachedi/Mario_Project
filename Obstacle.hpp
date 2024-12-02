@@ -4,7 +4,7 @@
 
 
 class Obstacle{
-    private:
+    protected:
         // position en x et y, largeur et hauteur de l'obstacle
         double x, y, h, l;
         friend class Screen; // Permet à Screen d'accéder aux membres privés de Mario
