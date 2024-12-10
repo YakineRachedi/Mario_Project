@@ -2,7 +2,6 @@
 #define OBSTACLE_CLASS
 #include "MARIO.hpp"
 
-
 class Obstacle{
     protected:
         // position en x et y, largeur et hauteur de l'obstacle
@@ -10,7 +9,6 @@ class Obstacle{
         friend class Screen; // Permet à Screen d'accéder aux membres privés de Mario
 
     public:
-        // méthode contacte à faire soit ici soit dans la classe Mario !
         Obstacle(double _x, double _y, double _h, double _l) : x(_x), y(_y), h(_h), l(_l) {}
 
         // getters

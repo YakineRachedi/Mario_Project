@@ -13,7 +13,7 @@ int main() {
         return -1;
     }
 
-    const int GROUND = 440; // Limite verticale du sol
+    
     Mario mario(0, GROUND, 0, 0); // Initialiser Mario au sol
 
     vector<Obstacle> obstacles = {
@@ -21,8 +21,8 @@ int main() {
         Obstacle(400, GROUND, 40, 30)
     };
 
-    vector<Enemi> ennemies = {
-        Enemi(650, GROUND - 50, 30, 50)
+    vector<Ennemi> ennemies = {
+        Ennemi(650, GROUND - 50, 30, 50)
     };
 
     bool running = true;
@@ -36,12 +36,11 @@ int main() {
         }
 
         for (const auto &enn : ennemies) {
-            screen.drawEnemi(enn);
+            screen.drawEnnemi(enn);
         }
 
         mario.update(DT);
         running = screen.processEvents(mario, obstacles, ennemies);
-        //gameManager.handleState(screen);
 
         screen.update();
     }

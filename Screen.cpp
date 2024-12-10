@@ -10,7 +10,6 @@ Screen::Screen() {
     m_renderer = NULL;
 }
 
-
 bool Screen::init() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         cout << "Error SDL initialization ..." << endl;
@@ -51,7 +50,7 @@ void Screen::close() {
     SDL_Quit();
 }
 
-bool Screen::processEvents(Mario & mario, const std::vector<Obstacle> & obstacles, const std::vector<Enemi> & ennemy) {
+bool Screen::processEvents(Mario & mario, const std::vector<Obstacle> & obstacles, const std::vector<Ennemi> & ennemy) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -96,8 +95,8 @@ bool Screen::processEvents(Mario & mario, const std::vector<Obstacle> & obstacle
         }
         try {
             // Vérifier les collisions avec les ennemis
-            for (const Enemi &object : ennemy) {
-                if (IsCollidingEnemi(mario, object)) {
+            for (const Ennemi &object : ennemy) {
+                if (IsCollidingEnnemi(mario, object)) {
                     // Lancer l'exception GameOverException
                     throw GameOverException();
                 }
@@ -107,8 +106,6 @@ bool Screen::processEvents(Mario & mario, const std::vector<Obstacle> & obstacle
         catch (const GameOverException& e) {
             // Gérer l'exception GameOver (afficher message et attendre 5 secondes)
             showGameOverMessage(); // Afficher le message Game Over
-            cout << "GAME OVER \n";
-            cout << "GAME OVER \n";
             cout << "GAME OVER \n";
             std::this_thread::sleep_for(std::chrono::seconds(5)); // Attendre 5 secondes avant de quitter
             return false; // Retourner false pour signaler que le jeu est terminé
@@ -121,7 +118,7 @@ bool Screen::processEvents(Mario & mario, const std::vector<Obstacle> & obstacle
 
 
 
-void Screen::drawMario(const Mario & mario) {
+void Screen::drawMario(const Mario & mario) const {
     SDL_Rect rect = {static_cast<int>(mario.mario_x), static_cast<int>(mario.mario_y), // mario à sa position actuelle
                      static_cast<int>(mario.H),static_cast<int>(mario.L)};
 
@@ -134,7 +131,7 @@ void Screen::update() {
     SDL_RenderPresent(m_renderer); // Actualiser l'écran et mettre à jours
 }
 
-void Screen::drawBackground() {
+void Screen::drawBackground() const {
     // Dessiner le ciel
     SDL_SetRenderDrawColor(m_renderer, 135, 206, 235, 255); // Bleu ciel
     SDL_Rect skyRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT / 2}; // La moitié supérieure de l'écran
@@ -147,21 +144,21 @@ void Screen::drawBackground() {
 }
 
 
-void Screen::drawObstacle(const Obstacle & terrainObstacle){
+void Screen::drawObstacle(const Obstacle & terrainObstacle) const{
     SDL_Rect rect = {static_cast<int>(terrainObstacle.x), static_cast<int>(terrainObstacle.y),
              static_cast<int>(terrainObstacle.h), static_cast<int>(terrainObstacle.l)};
     SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255); // Noir
     SDL_RenderFillRect(m_renderer, &rect);
 }
 
-void Screen::drawEnemi(const Enemi & terrainEnnemi){
+void Screen::drawEnnemi(const Ennemi & terrainEnnemi) const {
     SDL_Rect rect = {static_cast<int>(terrainEnnemi.x), static_cast<int>(terrainEnnemi.y),
              static_cast<int>(terrainEnnemi.h), static_cast<int>(terrainEnnemi.l)};
     SDL_SetRenderDrawColor(m_renderer, 0, 255, 0, 255); // Vert
     SDL_RenderFillRect(m_renderer, &rect);
 }
 
-SDL_bool Screen::IsCollidingObstacle(const Mario &mario, const Obstacle &object) {
+SDL_bool Screen::IsCollidingObstacle(const Mario &mario, const Obstacle &object) const {
     // je récupère la position du rectangle qui représente Mario    
     SDL_Rect marioRect = {
         static_cast<int>(mario.mario_x), static_cast<int>(mario.mario_y),
@@ -176,7 +173,7 @@ SDL_bool Screen::IsCollidingObstacle(const Mario &mario, const Obstacle &object)
     return SDL_HasIntersection(&marioRect, &objectRect); // je test l'intersection avec la fonction prédéfinie
 }
 
-bool Screen::checkCollisionInDirectionObstacle(const Mario & mario, const std::vector<Obstacle> & obstacles, int dx, int dy) {
+bool Screen::checkCollisionInDirectionObstacle(const Mario & mario, const std::vector<Obstacle> & obstacles, int dx, int dy) const {
     
     // crée un "mouvement futur" pour Mario (en tenant compte de la direction)
     float future_x = mario.mario_x + dx;
@@ -204,7 +201,7 @@ bool Screen::checkCollisionInDirectionObstacle(const Mario & mario, const std::v
 }
 
 
-bool Screen::IsCollidingEnemi(const Mario & mario, const Enemi & object) {
+bool Screen::IsCollidingEnnemi(const Mario & mario, const Ennemi & object) const {
     // je récupère la position du rectangle qui représente Mario    
     SDL_Rect marioRect = {
         static_cast<int>(mario.mario_x), static_cast<int>(mario.mario_y),
@@ -220,7 +217,7 @@ bool Screen::IsCollidingEnemi(const Mario & mario, const Enemi & object) {
 }
 
 
-void Screen::showGameOverMessage() {
+void Screen::showGameOverMessage() const {
     // Afficher un texte "GAME OVER" au centre de l'écran
     SDL_Color textColor = {255, 0, 0}; // Rouge
     TTF_Font *font = TTF_OpenFont("/System/Library/Fonts/Supplemental/Arial.ttf", 48);

@@ -7,10 +7,8 @@
 
 class Screen;
 
-//#define SCREEN_WIDTH 1080
-//#define SCREEN_HEIGHT 960
-//#define GROUND SCREEN_HEIGHT / 2
 #define DT 0.1
+#define GROUND 440
 
 class Mario{
     private :
@@ -33,8 +31,5 @@ class Mario{
         void avancer(double vit_x, double vit_y, double delta_t);
         void saute(double delta_t);
         void update(double delta_t); // Mise à jour générale
-
-
 };
-
 #endif

@@ -21,7 +21,6 @@ message(STATUS "SDL2_ttf include dirs: ${SDL2_TTF_INCLUDE_DIRS}")
 set(SOURCES
     test.cpp
     MARIO.cpp
-    Obstacle.cpp
     Screen.cpp
 )
 
