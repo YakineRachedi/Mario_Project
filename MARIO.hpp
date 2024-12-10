@@ -19,7 +19,6 @@ class Mario{
         static constexpr double L = 40.0;    // Largeur
         static constexpr double H = 50.0;    // Hauteur
         bool isJumping;          // Indique si Mario est en train de sauter
-
         friend class Screen;                // Permet à Screen d'accéder aux membres privés de Mario
 
     public :
