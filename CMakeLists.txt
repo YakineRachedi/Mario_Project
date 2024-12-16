@@ -22,13 +22,14 @@ set(SOURCES
     test.cpp
     MARIO.cpp
     Screen.cpp
+    Ennemi.cpp
 )
 
 set(HEADERS
     MARIO.hpp
     Obstacle.hpp
     Screen.hpp
-    Enemi.hpp
+    Ennemi.hpp
 )
 
 add_executable(test ${SOURCES} ${HEADERS})

@@ -50,7 +50,7 @@ void Screen::close() {
     SDL_Quit();
 }
 
-bool Screen::processEvents(Mario & mario, const std::vector<Obstacle> & obstacles, const std::vector<Ennemi> & ennemy) {
+bool Screen::processEvents(Mario & mario, const std::vector<Obstacle> & obstacles, std::vector<Ennemi> & ennemy) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -90,6 +90,19 @@ bool Screen::processEvents(Mario & mario, const std::vector<Obstacle> & obstacle
                     mario.mario_y = obstacle.y - mario.H;  // positionner Mario au sommet de l'obstacle
                     mario.Vy = 0;  // annuler sa vitesse verticale
                     mario.isJumping = false;  // Mario n'est plus en train de sauter
+                }
+            }
+        }
+        // Gérer le mouvement des ennemis et leur collision avec les obstacles
+        for (Ennemi &ennemi : ennemy) {
+            bool collision = false;
+
+            // Vérifier si l'ennemi entre en collision avec un obstacle
+            for (const Obstacle &obstacle : obstacles) {
+                if (IsCollidingEnnemiObstacle(obstacle, ennemi)) {
+                    collision = true;
+                    // Empêcher l'ennemi de traverser
+                    ennemi.set_position_x(ennemi.get_position_x() - 1); // Recule légèrement
                 }
             }
         }
@@ -214,6 +227,19 @@ bool Screen::IsCollidingEnnemi(const Mario & mario, const Ennemi & object) const
     };
 
     return SDL_HasIntersection(&marioRect, &objectRect); // je test l'intersection avec la fonction prédéfinie
+}
+
+bool Screen::IsCollidingEnnemiObstacle(const Obstacle & object, const Ennemi & Ennemy) const {
+    SDL_Rect EnnemyRect = {
+        static_cast<int>(Ennemy.x), static_cast<int>(Ennemy.y),
+        static_cast<int>(Ennemy.l), static_cast<int>(Ennemy.l)
+    };
+    SDL_Rect objectRect = {
+        static_cast<int>(object.x), static_cast<int>(object.y),
+        static_cast<int>(object.l), static_cast<int>(object.h)
+    };
+
+    return SDL_HasIntersection(&EnnemyRect, &objectRect);
 }
 
 

@@ -60,5 +60,5 @@ void Mario::update(double delta_t) {
 
     // Limiter les positions (par exemple, pour rester dans l'écran)
     if (mario_x < 0) mario_x = 0;
-    if (mario_x > 800 - L) mario_x = 800 - L; // Limite horizontale
+    if (mario_x > 1080 - L) mario_x = 1080 - L; // Limite horizontale
 }

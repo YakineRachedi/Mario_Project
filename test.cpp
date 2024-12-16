@@ -2,7 +2,7 @@
 #include "Screen.hpp"
 #include "MARIO.hpp"
 #include <vector>
-
+#include <ctime>
 
 using namespace std;
 
@@ -17,14 +17,14 @@ int main() {
     Mario mario(0, GROUND, 0, 0); // Initialiser Mario au sol
 
     vector<Obstacle> obstacles = {
-        Obstacle(200, GROUND, 40, 30),
-        Obstacle(400, GROUND, 40, 30)
+        Obstacle(200, GROUND + 10, 40, 30),
+        Obstacle(400, GROUND + 10, 40, 30)
     };
 
     vector<Ennemi> ennemies = {
-        Ennemi(650, GROUND - 50, 30, 50)
+        Ennemi(650, GROUND + 10, 30, 30)
     };
-
+    std::mt19937 G(time(nullptr));
     bool running = true;
     while (running) {
         screen.clear();
@@ -35,7 +35,8 @@ int main() {
             screen.drawObstacle(obs);
         }
 
-        for (const auto &enn : ennemies) {
+        for (auto &enn : ennemies) {
+            enn.moveRandomely(G);
             screen.drawEnnemi(enn);
         }
 

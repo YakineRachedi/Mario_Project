@@ -20,8 +20,6 @@ class Screen{
 
     private :
         SDL_Window *m_window;
-/*         bool inputsEnabled = true; // Par défaut, les entrées sont activées
-        bool animationsRunning = true; // Par défaut, les animations tournent */
         friend class GameManager;
     protected :
         SDL_Renderer *m_renderer;
@@ -30,7 +28,7 @@ class Screen{
         bool init();
         void close();
         void clear();
-        bool processEvents(Mario & mario, const std::vector<Obstacle> & obstacles, const std::vector<Ennemi> & ennemy); //faire tourner le jeux
+        bool processEvents(Mario & mario, const std::vector<Obstacle> & obstacles,std::vector<Ennemi> & ennemy); //faire tourner le jeux
         
         // Méthodes pour l'affichage
         void drawMario(const Mario & mario) const;  // Dessiner Mario à sa position actuelle
@@ -44,6 +42,7 @@ class Screen{
         bool checkCollisionInDirectionObstacle(const Mario & mario, const std::vector<Obstacle> & obstacles, int dx, int dy) const;
 
         bool IsCollidingEnnemi(const Mario & mario, const Ennemi & object) const;
+        bool IsCollidingEnnemiObstacle(const Obstacle & object, const Ennemi & Ennemy) const;
 
 
 };

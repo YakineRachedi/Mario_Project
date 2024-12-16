@@ -15,7 +15,8 @@ class Obstacle{
         double get_position_x() const {return this->x;}
         double get_position_y() const {return this->y;}
         double get_hauteur() const {return this->h;}
-        double get_largeur() const {return this->l;} 
+        double get_largeur() const {return this->l;}
+        void set_position_x(double new_x) {if (new_x >= 0) { x = new_x;}}
 };
 
 #endif
